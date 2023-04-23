@@ -3,15 +3,18 @@ package com.example.demospringsecurityproxy131.controller;
 import com.example.demospringsecurityproxy131.model.User;
 import com.example.demospringsecurityproxy131.model.UserEntity;
 import com.example.demospringsecurityproxy131.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class UserController {
 
     private final UserRepository userRepository;
@@ -32,6 +35,12 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, path = "/users")
     public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/users/info")
+    public void displayUserInfoInLogs(Principal principal){
+        String name = principal.getName();
+        log.info(name);
     }
 
 }

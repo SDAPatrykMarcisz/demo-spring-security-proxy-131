@@ -19,6 +19,7 @@ public class WebSecurityConfig {
                 (request -> request //kazdy przychodzacy request, sprawdza czy pasuje do patternu (wzorca) url, jesli tak to jest obsluzony przez ta regule, jesli nie idzie do nastepnej
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() //kazdy moze wywolac zapytanie dla endpointu /users metoda POST
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN") //moze wywolac uzytkownik, ktory ma role admin
+                        .requestMatchers(HttpMethod.GET, "/users/info").authenticated() //na /users/info moze 'wejsc' tylko zalogowany uzytkownik
                 )
         );
         return httpSecurity.build();
