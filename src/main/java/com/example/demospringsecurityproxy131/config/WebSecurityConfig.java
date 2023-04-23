@@ -14,8 +14,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(csrf -> csrf.disable()); //wylaczamy csrf bo nie korzystamy z frontu, tylko REST-a
+        httpSecurity.formLogin(form -> form.permitAll()); //wlaczamy mozliwosc logowania sie przez formularz
         httpSecurity.authorizeHttpRequests(
-                (request -> request.requestMatchers(HttpMethod.POST, "/users").permitAll())  //kazdy moze wywolac zapytanie dla endpointu /users metoda POST
+                (request -> request //kazdy przychodzacy request, sprawdza czy pasuje do patternu (wzorca) url, jesli tak to jest obsluzony przez ta regule, jesli nie idzie do nastepnej
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll() //kazdy moze wywolac zapytanie dla endpointu /users metoda POST
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN") //moze wywolac uzytkownik, ktory ma role admin
+                )
         );
         return httpSecurity.build();
     }
